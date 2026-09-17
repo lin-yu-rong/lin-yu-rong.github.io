@@ -66,13 +66,14 @@ var folderFilter_inline = `(function(){
     function getRows(){ return Array.prototype.slice.call(tbody.querySelectorAll('tr[data-title]')); }
     function sortBy(col, dir){
       var rows = getRows();
-      var idx = {title:0, date:1, tags:2, source:3, author:4}[col];
+      var idx = {title:0, date:1, event:2, tags:3, source:4, author:5}[col];
       if (idx == null) return;
       rows.sort(function(a,b){
         var av, bv;
-        if (col === 'date'){
-          av = parseInt(a.getAttribute('data-ts') || '0', 10);
-          bv = parseInt(b.getAttribute('data-ts') || '0', 10);
+        if (col === 'date' || col === 'event'){
+          var tsAttr = col === 'date' ? 'data-ts' : 'data-event-ts';
+          av = parseInt(a.getAttribute(tsAttr) || '0', 10);
+          bv = parseInt(b.getAttribute(tsAttr) || '0', 10);
         } else {
           av = (a.children[idx] ? a.children[idx].textContent : '').trim().toLowerCase();
           bv = (b.children[idx] ? b.children[idx].textContent : '').trim().toLowerCase();
@@ -144,7 +145,7 @@ var folderFilter_inline = `(function(){
             if (!tagOk){ ok = false; break; }
             continue;
           }
-          var idx = {title:0, date:1, tags:2, source:3, author:4}[k];
+          var idx = {title:0, date:1, event:2, tags:3, source:4, author:5}[k];
           var text = (row.children[idx] ? row.children[idx].textContent : '').trim().toLowerCase();
           if (text.indexOf(filters[k]) === -1){ ok = false; break; }
         }
