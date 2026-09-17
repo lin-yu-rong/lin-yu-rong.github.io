@@ -25,10 +25,11 @@ var f2 = 0;
 var folderFilter_css = `.folder-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.95rem;table-layout:fixed}.folder-filter{overflow-x:auto}
 .folder-table th:nth-child(1){width:275px}
 .folder-table th:nth-child(2){width:90px}
-.folder-table th:nth-child(3){width:245px}
-.folder-table th:nth-child(4){width:110px}
-.folder-table th:nth-child(5){width:75px}.folder-table td:nth-child(2),.folder-table td:nth-child(4),.folder-table td:nth-child(5),.folder-table th:nth-child(2),.folder-table th:nth-child(4),.folder-table th:nth-child(5){white-space:nowrap}
-@media (max-width:800px){.folder-filter{overflow-x:auto;-webkit-overflow-scrolling:touch}.folder-table{table-layout:fixed;width:calc(100% + 270px)}.folder-table th{font-size:.85rem}.folder-table th:nth-child(1),.folder-table td:nth-child(1){width:242px;min-width:0;font-size:.85rem;white-space:normal;word-break:break-word}.folder-table th:nth-child(2),.folder-table td:nth-child(2){width:90px;white-space:nowrap}.folder-table th:nth-child(3),.folder-table td:nth-child(3){width:135px;min-width:0;white-space:normal;word-break:break-word}.folder-table th:nth-child(4),.folder-table td:nth-child(4){width:110px;word-break:break-word}.folder-table th:nth-child(5),.folder-table td:nth-child(5){width:70px;white-space:nowrap}.folder-table th input{display:none}.folder-table th .date-controls{display:block}.folder-table th .date-controls select{width:100%}}
+.folder-table th:nth-child(3){width:90px}
+.folder-table th:nth-child(4){width:220px}
+.folder-table th:nth-child(5){width:110px}
+.folder-table th:nth-child(6){width:75px}.folder-table td:nth-child(2),.folder-table td:nth-child(3),.folder-table td:nth-child(5),.folder-table td:nth-child(6),.folder-table th:nth-child(2),.folder-table th:nth-child(3),.folder-table th:nth-child(5),.folder-table th:nth-child(6){white-space:nowrap}
+@media (max-width:800px){.folder-filter{overflow-x:auto;-webkit-overflow-scrolling:touch}.folder-table{table-layout:fixed;width:calc(100% + 360px)}.folder-table th{font-size:.85rem}.folder-table th:nth-child(1),.folder-table td:nth-child(1){width:242px;min-width:0;font-size:.85rem;white-space:normal;word-break:break-word}.folder-table th:nth-child(2),.folder-table td:nth-child(2){width:90px;white-space:nowrap}.folder-table th:nth-child(3),.folder-table td:nth-child(3){width:90px;white-space:nowrap}.folder-table th:nth-child(4),.folder-table td:nth-child(4){width:135px;min-width:0;white-space:normal;word-break:break-word}.folder-table th:nth-child(5),.folder-table td:nth-child(5){width:110px;word-break:break-word}.folder-table th:nth-child(6),.folder-table td:nth-child(6){width:70px;white-space:nowrap}.folder-table th input{display:none}.folder-table th .date-controls{display:block}.folder-table th .date-controls select{width:100%}}
 .folder-table td:nth-child(3){white-space:nowrap;font-variant-numeric:tabular-nums}
 .folder-table td:nth-child(1){word-break:break-word}
 .folder-table th,.folder-table td{padding:.5rem .6rem;text-align:left;border-bottom:1px solid var(--lightgray)}
@@ -104,21 +105,26 @@ var folderFilter_inline = `(function(){
         var k = inputs[i].getAttribute('data-filter');
         filters[k] = (inputs[i].value || '').trim().toLowerCase();
       }
-      var dateTh = table.querySelector('th[data-col="date"]');
-      var dateSel = dateTh ? dateTh.querySelector('select[data-date-mode]') : null;
-      var dateYearInp = dateTh ? dateTh.querySelector('input[data-date-year]') : null;
-      var dateMode = dateSel ? dateSel.value : '';
-      var rawYear = dateYearInp ? (dateYearInp.value || '').trim() : '';
-      var fullDateMatch = rawYear.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
-      var dateTs = NaN;
-      var dateYearNum = NaN;
-      if (fullDateMatch) {
-        dateTs = new Date(Number(fullDateMatch[1]), Number(fullDateMatch[2]) - 1, Number(fullDateMatch[3])).getTime();
-      } else {
-        dateYearNum = parseInt(rawYear, 10);
-        if (isNaN(dateYearNum) || dateYearNum <= 0) dateYearNum = NaN;
+      var dateCols = table.querySelectorAll('th[data-date-col]');
+      var dateStates = [];
+      for (var di=0; di<dateCols.length; di++){
+        var dTh = dateCols[di];
+        var dCol = dTh.getAttribute('data-date-col');
+        var dSel = dTh.querySelector('select[data-date-mode]');
+        var dYearInp = dTh.querySelector('input[data-date-year]');
+        var dMode = dSel ? dSel.value : '';
+        var dRaw = dYearInp ? (dYearInp.value || '').trim() : '';
+        var dFull = dRaw.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+        var dTs = NaN, dYear = NaN;
+        if (dFull) {
+          dTs = new Date(Number(dFull[1]), Number(dFull[2]) - 1, Number(dFull[3])).getTime();
+        } else {
+          dYear = parseInt(dRaw, 10);
+          if (isNaN(dYear) || dYear <= 0) dYear = NaN;
+        }
+        var dActive = !!dMode && dMode !== 'all' && (dMode === 'empty' ? true : (!isNaN(dYear) || !isNaN(dTs)));
+        dateStates.push({ col: dCol, mode: dMode, ts: dTs, year: dYear, active: dActive });
       }
-      var dateActive = !!dateMode && dateMode !== 'all' && (dateMode === 'empty' ? true : (!isNaN(dateYearNum) || !isNaN(dateTs)));
       getRows().forEach(function(row){
         var ok = true;
         for (var k in filters){
@@ -172,8 +178,8 @@ var folderFilter_inline = `(function(){
       inp.addEventListener('input', filter);
       inp.addEventListener('keydown', function(e){ e.stopPropagation(); });
     });
-    var dateThBind = table.querySelector('th[data-col="date"]');
-    if (dateThBind){
+    var dateThBinds = table.querySelectorAll('th[data-date-col]');
+    Array.prototype.forEach.call(dateThBinds, function(dateThBind){
       var ds = dateThBind.querySelector('select[data-date-mode]');
       var dy = dateThBind.querySelector('input[data-date-year]');
       if (ds){
@@ -186,7 +192,7 @@ var folderFilter_inline = `(function(){
         dy.addEventListener('input', filter);
         dy.addEventListener('keydown', function(e){ e.stopPropagation(); });
       }
-    }
+    });
     var curCol = table.getAttribute('data-sort-col');
     var curDir = table.getAttribute('data-sort-dir');
     if (curCol && curDir) sortBy(curCol, curDir);
@@ -326,6 +332,9 @@ var FolderFilter_default = ((opts) => {
       const dateVal = fm.publish;
       const dateStr = formatDate(dateVal);
       const ts = getTimestamp(dateVal);
+      const eventVal = fm.event;
+      const eventStr = formatDate(eventVal);
+      const eventTs = getTimestamp(eventVal);
       return {
         slug: c.slug,
         title,
@@ -334,6 +343,8 @@ var FolderFilter_default = ((opts) => {
         tags,
         dateStr,
         ts,
+        eventStr,
+        eventTs,
       };
     });
 
@@ -351,6 +362,7 @@ var FolderFilter_default = ((opts) => {
     const dateHeader = u2("th", {
       class: "sortable desc",
       "data-col": "date",
+      "data-date-col": "date",
       children: [
         "发表时间",
         u2("span", { class: "sort-indicator" }),
@@ -370,7 +382,29 @@ var FolderFilter_default = ((opts) => {
         ]})
       ]
     });
-
+    const eventHeader = u2("th", {
+      class: "sortable",
+      "data-col": "event",
+      "data-date-col": "event",
+      children: [
+        "事件时间",
+        u2("span", { class: "sort-indicator" }),
+        u2("div", { class: "date-controls", children: [
+          u2("select", {
+            "data-date-mode": "all",
+            class: "date-mode",
+            children: [
+              u2("option", { value: "all", children: ["all"] }),
+              u2("option", { value: "after", children: ["≥"] }),
+              u2("option", { value: "before", children: ["≤"] }),
+              u2("option", { value: "equal", children: ["="] }),
+              u2("option", { value: "empty", children: ["∅"] }),
+            ]
+          }),
+          u2("input", { type: "text", "data-date-year": "", placeholder: "年/日", inputmode: "numeric" })
+        ]})
+      ]
+    });
     const tagLink = (tag) => u2("span", { class: "tag-pill", children: [
       u2("a", { href: basePath + "/tags/" + tag, class: "internal tag-link", children: [tag] })
     ] });
@@ -383,6 +417,7 @@ var FolderFilter_default = ((opts) => {
         u2("thead", { children: [u2("tr", { children: [
           colHeader("title", "标题"),
           dateHeader,
+          eventHeader,
           colHeader("tags", "标签", "", "空格分隔可多选"),
           colHeader("source", "来源"),
           colHeader("author", "作者"),
@@ -391,11 +426,13 @@ var FolderFilter_default = ((opts) => {
           "data-title": r.title,
           "data-author": r.author,
           "data-ts": String(r.ts),
+          "data-event-ts": String(r.eventTs),
           "data-source": r.source,
           "data-tags": r.tags.join(" "),
           children: [
             u2("td", { children: [u2("a", { href: basePath + "/" + r.slug, class: "internal", children: [r.title] })] }),
             u2("td", { children: [r.dateStr] }),
+            u2("td", { children: [r.eventStr] }),
             u2("td", { children: r.tags.map(tagLink) }),
             u2("td", { children: [r.source] }),
             u2("td", { children: [authorLink(r.author)] }),
