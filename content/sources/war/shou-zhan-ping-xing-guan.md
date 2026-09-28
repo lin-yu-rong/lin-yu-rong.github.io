@@ -7,7 +7,7 @@ tags:
   - 部下
 publish: 1957-08-01
 origin:
-  - 《红旗飘飘》
+  - 《红旗飘飘3》
 aliases:
   - 李天佑：首战平型关
 type: 战史回忆

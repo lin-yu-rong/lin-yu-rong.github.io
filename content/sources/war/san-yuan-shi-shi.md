@@ -7,7 +7,7 @@ tags:
   - 部下
 publish: 1965-08-15
 origin:
-  - 《星火燎原》
+  - 人民日报
 aliases:
   - 田国浩：三原誓师
 type: 战史回忆

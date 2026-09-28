@@ -7,7 +7,7 @@ tags:
   - 部下
 publish: 1957-08-01
 origin:
-  - 《红旗飘飘》
+  - 《红旗飘飘3》
 aliases:
   - 曾国华：强渡黄河
 type: 战史回忆

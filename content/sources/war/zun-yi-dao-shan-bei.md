@@ -6,14 +6,14 @@ tags:
   - 部下
 publish: 1960-06-01
 origin:
-  - 《红旗飘飘》
+  - 《红旗飘飘14》
 aliases:
   - 刘忠：从遵义到陕北——记林彪同志在长征中的故事片断
 type: 战史回忆
 period: 34-36 长征
 event: 1935-01-08
 ---
-　　*<p align="center">原载《红旗飘飘14》（60版，今删）</p>*
+　　*<p align="center">原载《红旗飘飘14》（60版，今删，[文学城](https://blog.wenxuecity.com/myblog/62877/201312/13894.html)）</p>*
 <p align="center">刘忠（1906-2002）</p>
 <p align="center">中将，福建上杭人</p>
 <p align="center">时任红一军团司令部侦察科科长。</p>

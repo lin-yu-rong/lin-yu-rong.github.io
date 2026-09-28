@@ -6,7 +6,7 @@ tags:
   - 战友
 publish: 1958-08-01
 origin:
-  - 《星火燎原》
+  - 《星火燎原1》
 aliases:
   - 陈士渠：七溪岭战斗
 type: 战史回忆

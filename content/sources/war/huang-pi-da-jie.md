@@ -6,7 +6,7 @@ tags:
   - 部下
 publish: 1960-06-01
 origin:
-  - 《红旗飘飘》
+  - 《红旗飘飘14》
 aliases:
   - 熊伯涛：黄陂大捷
 type: 战史回忆
