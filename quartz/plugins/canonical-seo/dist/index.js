@@ -7,6 +7,8 @@ const CanonicalPlugin = (opts) => {
 
   return {
     name: "CanonicalSEO",
+    // 本插件只注入 head 资源，不产出文件；emit 存在即可满足 emitter 类别校验
+    emit: () => [],
     externalResources: () => {
       return {
         additionalHead: [

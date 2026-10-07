@@ -1,9 +1,11 @@
-import { QuartzEmitterPlugin } from "@quartz-community/types"
-
-type CanonicalOptions = {
+export type CanonicalOptions = {
   siteUrl?: string
 }
 
-declare const CanonicalPlugin: QuartzEmitterPlugin<CanonicalOptions | undefined>
-export { CanonicalPlugin, CanonicalPlugin as Canonical }
+export declare const CanonicalPlugin: (opts?: CanonicalOptions) => {
+  name: string
+  emit: () => string[]
+  externalResources: () => { additionalHead: unknown[] }
+}
+
 export default CanonicalPlugin
