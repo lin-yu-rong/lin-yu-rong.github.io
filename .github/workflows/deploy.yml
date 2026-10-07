@@ -29,6 +29,12 @@ jobs:
         run: npm ci
       - name: Build Quartz
         run: npx quartz build
+      # Quartz 的 Assets emitter 会用 slugifyFilePath() 复制 content 下的非 Markdown 文件，
+      # 而该函数对 .md / .html 会剥离扩展名，导致 public/ 里只有 googlef4676a414e735631
+      # （无扩展名），Google 请求 /googlef4676a414e735631.html 时 404 → 验证失败。
+      # 故在 build 之后按原名补回该文件。
+      - name: Restore Google verification HTML file
+        run: cp content/googlef4676a414e735631.html public/googlef4676a414e735631.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

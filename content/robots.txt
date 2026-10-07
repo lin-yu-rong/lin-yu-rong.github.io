@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lin-yu-rong.github.io/sitemap.xml

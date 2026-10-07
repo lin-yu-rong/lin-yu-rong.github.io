@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics:
     provider: plausible
-  locale: en-US
+  locale: zh-CN
   baseUrl: lin-yu-rong.github.io
   ignorePatterns:
     - private
@@ -42,6 +42,11 @@ configuration:
         highlight: rgba(143, 159, 169, 0.15)
         textHighlight: "#b3aa0288"
 plugins:
+  - source: "./quartz/plugins/canonical-seo"
+    enabled: true
+    options:
+      siteUrl: "https://lin-yu-rong.github.io"
+    order: 1
   - source: "@quartz-community/created-modified-date"
     enabled: true
     options:

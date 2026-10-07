@@ -1,0 +1,33 @@
+{
+  "name": "canonical-seo",
+  "version": "1.0.0",
+  "description": "Injects rel=canonical, og:locale and hreflang into <head> for Quartz v5",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./dist/index.js",
+    "./components": "./dist/index.js"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "quartz": {
+    "name": "canonical-seo",
+    "displayName": "Canonical SEO",
+    "category": "emitter",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 5,
+    "defaultEnabled": true,
+    "defaultOptions": {
+      "siteUrl": "https://lin-yu-rong.github.io"
+    },
+    "optionSchema": {
+      "siteUrl": {
+        "type": "string",
+        "description": "Canonical site origin, no trailing slash"
+      }
+    }
+  }
+}
