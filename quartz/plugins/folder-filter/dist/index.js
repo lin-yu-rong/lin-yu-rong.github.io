@@ -149,27 +149,31 @@ var folderFilter_inline = `(function(){
           var text = (row.children[idx] ? row.children[idx].textContent : '').trim().toLowerCase();
           if (text.indexOf(filters[k]) === -1){ ok = false; break; }
         }
-        if (ok && dateActive){
-          var ts = parseInt(row.getAttribute('data-ts') || '0', 10);
-          var hasDate = ts !== 0 && !isNaN(ts);
-          var dateOk = false;
-          if (dateMode === 'empty') {
-            dateOk = !hasDate;
-          } else if (!hasDate) {
-            dateOk = false;
-          } else if (dateMode === 'after') {
-            dateOk = !isNaN(dateTs) ? ts >= dateTs : new Date(ts).getFullYear() >= dateYearNum;
-          } else if (dateMode === 'before') {
-            dateOk = !isNaN(dateTs) ? ts <= dateTs : new Date(ts).getFullYear() <= dateYearNum;
-          } else if (dateMode === 'equal') {
-            if (!isNaN(dateTs)) {
-              var dt = new Date(ts), tt = new Date(dateTs);
-              dateOk = dt.getFullYear() === tt.getFullYear() && dt.getMonth() === tt.getMonth() && dt.getDate() === tt.getDate();
-            } else {
-              dateOk = new Date(ts).getFullYear() === dateYearNum;
+        if (ok && dateStates.length){
+          for (var si = 0; si < dateStates.length; si++){
+            var st = dateStates[si];
+            if (!st.active) continue;
+            var rowTs = parseInt(row.getAttribute(st.col === 'event' ? 'data-event-ts' : 'data-ts') || '0', 10);
+            var hasDate = rowTs !== 0 && !isNaN(rowTs);
+            var dateOk = false;
+            if (st.mode === 'empty') {
+              dateOk = !hasDate;
+            } else if (!hasDate) {
+              dateOk = false;
+            } else if (st.mode === 'after') {
+              dateOk = !isNaN(st.ts) ? rowTs >= st.ts : new Date(rowTs).getFullYear() >= st.year;
+            } else if (st.mode === 'before') {
+              dateOk = !isNaN(st.ts) ? rowTs <= st.ts : new Date(rowTs).getFullYear() <= st.year;
+            } else if (st.mode === 'equal') {
+              if (!isNaN(st.ts)) {
+                var dt = new Date(rowTs), tt = new Date(st.ts);
+                dateOk = dt.getFullYear() === tt.getFullYear() && dt.getMonth() === tt.getMonth() && dt.getDate() === tt.getDate();
+              } else {
+                dateOk = new Date(rowTs).getFullYear() === st.year;
+              }
             }
+            if (!dateOk) { ok = false; break; }
           }
-          if (!dateOk) ok = false;
         }
         row.style.display = ok ? '' : 'none';
       });
