@@ -311,7 +311,7 @@ function i18n(locale) {
 }
 
 // src/components/styles/footer.scss
-var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
+var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter p {\n  margin: 0;\n}\nfooter p + p {\n  margin-top: 0.25rem;\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
 var l;
 l = { __e: function(n2, l2, u3, t2) {
   for (var i2, r2, o2; l2 = l2.__; ) if ((i2 = l2.__c) && !i2.__) try {
@@ -347,13 +347,15 @@ var Footer_default = ((opts) => {
   const Footer = ({ displayClass, cfg }) => {
     const year = (/* @__PURE__ */ new Date()).getFullYear();
         const links = opts?.links ?? {};
-    const linkEls = Object.entries(links).map(([text, link]) =>
-      u2("a", { href: link, children: [text, (text === "Quartz" && version) ? ` v${version}` : ""] })
-    );
-    const joined = [];
-    linkEls.forEach((el, i2) => { if (i2 > 0) joined.push(" & "); joined.push(el); });
-    const children = [i18n(cfg?.locale ?? "en-US").components.footer.createdWith, " ", ...joined, " © ", year];
-    return u2("footer", { class: `${displayClass ?? ""}`, children: [u2("p", { children })] });
+    const createdWith = i18n(cfg?.locale ?? "en-US").components.footer.createdWith;
+    const lines = Object.entries(links).map(([text, link], i2) => {
+      const anchor = u2("a", { href: link, children: [text, (text === "Quartz" && version) ? ` v${version}` : ""] });
+      if (i2 === 0) {
+        return u2("p", { children: [createdWith, " ", anchor, " © ", year] });
+      }
+      return u2("p", { children: [anchor] });
+    });
+    return u2("footer", { class: `${displayClass ?? ""}`, children: lines });
   };
   Footer.css = footer_default;
   return Footer;

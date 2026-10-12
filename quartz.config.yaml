@@ -258,7 +258,7 @@ plugins:
     options:
       links:
         GitHub: https://github.com/lin-yu-rong/lin-yu-rong.github.io
-        Quartz: https://quartz.jzhao.xyz
+        "友情站点：林办档案馆": https://linyurong913.github.io/ArchiveOfLin/
   - source: "@quartz-community/recent-notes"
     enabled: true
     options:
